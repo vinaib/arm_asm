@@ -1,0 +1,7 @@
+Instructions can broadly be placed in one of a number of classes:
+-> Data processing 
+-> Memory access
+-> Control flow
+-> System(Coprocessor, debug, mode)
+
+

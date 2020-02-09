@@ -1,0 +1,271 @@
+Cortex A8
+--------------------------------------------------------------------------------
+# cortex A8 implements ARMv7-A architecture
+# 32 bit instruction set
+# 16bit and 32bit thumb2
+# thumbEE instruction set
+# security extensions 
+# advanced SIMD arch
+
+ARMV7 data types
+--------------------------------------------------------------------------------
+Byte: 8 bits
+Half Word: 16 bits
+Word: 32 bits
+Double Word: 64 bits
+
+Registers
+--------------------------------------------------------------------------------
+-16 32bit registers
+-SP LR PC
+
+Arm processor modes before ARMv6
+-------------------------------------------------------------------------------
+User (USR): Mode in which most programs and applications run: 	unprivileged
+FIQ:		Entered on an FIQ interrupt exception: 				privileged
+IRQ:		Entered on an IRQ interrupt exception:				Priv
+Supervisor:	Entered on reset or when a Supervisor Call instruction ( SVC ):Priv
+Abort:		Entered on a memory access exception: Priv
+Undef:		Entered when an undefined instruction executed: Priv
+System:		Mode in which the OS runs, sharing the register view with User mode:
+			Priv
+
+TrustZone Security Extensions:
+--------------------------------------------------------------------------------
+system security is achieved by dividing all of the hardware and software
+resources for the device so that they exist in either the Secure world for the
+security subsystem, or the Normal (Non-secure) world for everything else. When a
+processor is in the Non-secure state, it cannot access the memory that is
+allocated for Secure state.
+
+In this situation the Secure Monitor acts as a gateway for moving between these
+two worlds.If Security Extensions are implemented, software executing in Monitor
+mode controls transition between Secure and Non-secure processor states.
+
+Hypervisor Mode
+--------------------------------------------------------------------------------
+The ARMv7-A architecture Virtualization Extensions add a hypervisor mode (Hyp),
+in addition to the existing privileged modes. Virtualization enables more than
+one Operating System to co-exist and operate on the same system. The ARM
+Virtualization Extensions therefore makes it possible to operate multiple
+Operating Systems on the same platform.
+
+If the Virtualization Extensions are implemented there is a privilege model
+different to that of previous architectures. In Non-secure state there can be
+three privilege levels:
+# PL0, 
+# PL1 and 
+# PL2
+
+These privilege levels are separate from the TrustZone Secure and Normal
+(Non-secure) settings.
+
+Non Secure: PL0: User Mode
+Non Secure: PL1: SYS, SVC, FIQ, IRQ, UND, ABT
+Non Secure: PL2: Hyp Mode
+
+Secure: PL0: User
+Secure: PL1: SYS, SVC, FIQ, IRQ, UND, ABT
+Secure: PL1: MON
+
+See ARMV7 Processor modes: See table 3.2 Page 42 in ARM Cortex A series
+Programmers guide.
+
+A general purpose Operating System, such as Linux, and its applications, are
+expected to run in Non-secure state. The Secure state is expected to be occupied
+by vendor-specific firmware, or security-sensitive software. In some cases,
+software running in the Secure state is even more privileged than that
+running in Non-secure.
+
+The current processor mode and execution state is contained in the Current
+Program Status Register (CPSR).
+
+--------------------------------------------------------------------------------
+* 2 additional Modes: Monitor Mode(MON), Hypervisor Mode(HYP).
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Registers
+--------------------------------------------------------------------------------
+# 16 32 bit registers R0 - R15
+# 15 of them R0 - R14 for general purpose registers
+# R15 is PC
+# and CPSR, SPSR
+
+R0 - R7 are Low registers
+R8 - R15 are High registers
+R13: Stack Poionter (SP)
+R14: Link Register (LR)
+R15: Program Counter (PC)
+CPSR: Current Program Status Register
+SPSR: Saved Program Status Register
+ELR_HYP: To store the exception return address
+
+Banked Register:
+--------------------------------------------------------------------------------
+Although software can access the registers, depending on which mode the software
+is executing in and the register being accessed, a register might correspond to
+a different physical storage location. This is called banking.
+
+# In all modes, LowRegisters and R15 share the same physical storage location
+
+# For all modes other than User and System modes, R13 and the SPSRs are banked
+
+# For FIQ in addition to R13, SPSR R8 - R12 are banked
+
+# LR is banked in FIQ, SV, ABT, SVC, UND, MON. This is not banked in HYP mode
+
+# R13 (in all modes) is the OS stack pointer, but it can be used as a general
+  purpose register when not required for stack operations.
+
+# R14 (the Link Register) holds the return address from a subroutine entered
+  when you use the branch with link ( BL ) instruction. It too can be used as a
+  general purpose register when it is not supporting returns from subroutines.
+
+# R15 is the program counter and holds the current program address (actually, it
+  always points eight bytes ahead of the current instruction in ARM state and
+  four bytes ahead of the current instruction in Thumb state, a legacy of the
+  three stage pipeline of the original ARM1 processor). When R15 is read in ARM
+  state, bits [1:0] are zero and bits [31:2] contain the PC. In Thumb state, bit
+  [0] always reads as zero.
+
+# The reset values of R0-R14 are unpredictable. SP, the stack pointer, must be
+  initialized (for each mode) by boot code before making use of the stack.
+
+# The ARM Architecture Procedure Call Standard (AAPCS) or ARM Embedded ABI
+  (AEABI) specifies how software should use the general purpose registers in
+  order to interoperate between different toolchains or programming languages.
+APSR
+-----
+# In User mode, a restricted form of the CPSR called the "Application Program
+  Status Register" (APSR) is accessed instead.
+ 
+ CPSR:
+----------------------------------------------------------------------
+|31      27|  26   25 |24 |23    20 |19   16|15   10|9|8|7|6|5|4    0|
+----------------------------------------------------------------------
+|N Z C V Q |  IT[1:0] |J  |Reserved |GE[3:0]|IT[7:2]|E|A|I|F|T|M[4:0]|  
+----------------------------------------------------------------------
+
+• N – Negative result from ALU.
+• Z – Zero result from ALU.
+• C – ALU operation Carry out.
+• V – ALU operation oVerflowed.
+• Q – cumulative saturation (also described as sticky).
+• J – indicates whether the core is in Jazelle state.
+• GE[3:0] – used by some SIMD instructions.
+• IT [7:2] – If-Then conditional execution of Thumb-2 instruction groups.
+• E bit controls load/store endianness.
+• A bit disables asynchronous aborts.
+• I bit disables IRQ.
+• F bit disables FIQ.
+• T bit – indicates whether the core is in Thumb state.
+• M[4:0] – specifies the processor mode 
+
+The processor changes mode automatically as a result of exception events. In
+User mode, you cannot manipulate the PSR bits [4:0] that control the processor
+mode or the A, I and F bits that govern the exceptions to be enabled or
+disabled.
+
+--------------------------------------------------------------------------------
+Coprocessor 15: System control coprocessor: See Arm ARM for details
+--------------------------------------------------------------------------------
+# provides control of many features of the core
+# It can contain up to sixteen 32-bit primary registers (c0 to c15)
+# Access to CP15 is privilege controlled and not all registers are available in
+  User mode
+# Often referred by name, for eg: CP15 System Control Register is called 
+  CP15.SCTLR
+
+CP15 Register Summary
+----------------------
+#  Main ID Register (MIDR)
+  Gives identification information for the processor (including part number and
+  revision).
+
+# Multiprocessor Affinity Register (MPIDR)    
+  Provides a way to uniquely identify individual cores within a cluster.
+
+CP15 c1 System Control registers
+--------------------------------
+# System Control Register (SCTLR)
+  The main processor control register which controls standard memory, system
+  facilities and provides status information for functions implemented in the
+  core.
+
+# Auxiliary Control Register (ACTLR)
+
+# Coprocessor Access Control Register (CPACR)
+  Controls access to all coprocessor except CP14 and CP15.
+
+# Secure Configuration Register (SCR) 
+  Used by Trustzone
+
+CP15 c2 and c3, memory protection and control registers
+-------------------------------------------------------
+# Data Fault Status Register (DFSR)
+  Gives status information about the last data fault
+
+# Instruction Fault Status Register (IFSR)
+  Gives status information about the last instruction fault
+
+# Data Fault Address Register (DFAR)
+  Gives the virtual address of the access that caused the most recent precise
+  data abort.
+
+# Instruction Fault Address Register (IFAR)
+  Gives the virtual address of the access that caused the most recent precise
+  prefetch abort.
+
+CP15 c7, cache maintenance and other functions
+-----------------------------------------------
+# Cache and branch predictor maintenance functions
+
+# Data and instruction barrier operations
+
+CP15 c8, TLB maintenance operations
+-------------------------------------
+
+CP15 c9, performance monitors
+------------------------------
+
+CP15 c12, Security Extensions registers
+----------------------------------------
+# Vector Base Address Register (VBAR) 
+  Provides the exception base address for exceptions that are not handled in
+  Monitor mode.
+
+# Monitor Vector Base Address Register (MVBAR)
+  Holds the exception base address for all exceptions that are taken to Monitor
+  mode.
+
+CP15 c13, process, context and thread ID registers
+---------------------------------------------------
+# Context ID Register (CONTEXTIDR)
+
+# Software thread ID registers
+
+CP15 c15, IMPLEMENTATION DEFINED registers
+-------------------------------------------
+# Configuration Base Address Register (CBAR) 
+
+ Provides a base address for the GIC and Local timer type peripherals.
+
+CP15 Instruction syntax
+------------------------
+All system architecture functions are controlled by reading or writing a general
+purpose processor register (Rt) from or to a set of registers (CRn) located
+within Coprocessor 15. The Op1, Op2, and CRm fields of the instruction can also
+be used to select registers or operations.
+
+MRC p15, Op1, Rt, CRn, CRm, Op2 ; read a CP15 register into an ARM register
+
+MCR p15, Op1, Rt, CRn, CRm, Op2 ; write a CP15 register from an ARM register
+
+eg:
+MRC p15, 0, R1, c0, c0, 0
+
+The result, placed in register R1.
+
+
+
