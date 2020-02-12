@@ -1,0 +1,82 @@
+1) cache stores both address of item in main memory and its data
+2) with caches performance is improved
+3) Reduces power consumption by avoiding the need to drive external signals
+
+Desgin facts
+------------
+1) larger caches for more expensive chips
+2) Making an internal core cache larger can potentially limit the max speed of
+the core
+
+How cahces improves performance?
+--------------------------------
+1) The improvement a cache provides is possible because computer programs
+execute in nonrandom ways.
+2) if program's access to memory were random, a cache would provide little
+improvement to overall system performance.
+3) The principle of locality of reference explains the performance improvement
+providede by the addition of a cache memory to a system.
+
+
+principle of locality of reference
+-----------------------------------
+This principle states that computer softeare programs frequently run small loops
+of code that repeatedlt operate on local section of data memory. The repeated
+use of the same code or data in memory is the reason a cache improves
+performance.
+
+Temporal and Spatial locality
+------------------------------
+The cache makes use of this repeated local reference in both time and space. 
+
+Temporal locality:
+if the reference is in time, it is called temproal locality. This means that
+programs tend to reuse the same address over time.
+Example: 
+Code, for instance, can contain loops, meaning that the same code gets
+executed repeatedly or a function can be called multiple times.
+
+if the reference is by address, it is called spatial locality. This means tend
+to use addresses that are near to each other.
+Example:
+Data accesses (for example, to the stack) can be limited to small regions of
+memory.
+
+Write Buffers
+-------------
+The write buffer is a block that decouples writes being done by the core when
+executing store instructions from the external memory bus. The core places the
+address, control and data values associated with the store into a set of
+hardware buffers. Like the cache, it sits between the core and main memory. This
+enables the core to move on and execute the next instructions without having to
+stop and wait for the slow main memory to actually complete the write operation.
+
+Cache Drawbacks
+---------------
+1) Non deterministic execution time:
+some problems that are not present in an uncached core. One such drawback is
+that program execution time can become non-deterministic. 
+
+This means that the execution time of a particular piece of code can vary
+significantly. This can be something of a problem in hard real-time systems
+where strongly deterministic behavior is required.
+
+2) External devices:
+You require a way to control how different parts of memory are accessed by the
+cache and write buffer.
+Example:
+In some cases, you want the core to read up-to-date data from an external
+device, such as a peripheral. It would not be sensible to use a cached value of
+a timer peripheral.
+
+3) Coherency:
+The contents of cache and external memory might not be the same. this is because
+the processor can update the cache contents, which have not yet been written
+back to main memory.
+
+This can be a particular problem when you have multiple cores or memory agents
+like an external DMA controller.
+
+
+
+
