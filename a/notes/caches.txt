@@ -1,6 +1,67 @@
-1) cache stores both address of item in main memory and its data
+1) cache stores both address of item in main memory and its data and some status
+information.
 2) with caches performance is improved
 3) Reduces power consumption by avoiding the need to drive external signals
+4) cahce Tag: 
+The top bits of the 32-bit address tells the cache where the
+information came from in main memory and is known as the tag.
+The tag take up physical space in the cache.
+5) size of cache:
+The total cache size is a measure of the amount of data it can hold; the RAMs
+used to hold tag values and status bits are not included in the calculation.
+
+6) cache line:
+It would be inefficient to hold one word of data for each tag address, so
+several locations are typically grouped together under the same tag. This
+logical block is commonly known as a cache line.
+
+7) Identifying line:
+The middle bits of the address, or index, identify the line.
+The index is used as address for the cache RAMs and does not require storage as
+a part of the tag. The index is the part of a memory address that determines in
+which line(s) of the cache the address can be found.
+
+A line refers to the smallest loadable unit of a cache, a block of contiguous
+words from main memory.
+
+The cache line contains tag, status bits and code or data.
+8) offset: offset in line. Even this is not required to store in Tag RAM.
+9) Associated with each line of data are one or more status bits.
+instruction cache: Valid bit
+Data Cache: valid bit, dirty bit
+10) way:
+A way is a subdivision of a cache, each way being of equal size and indexed in
+the same fashion. The line associated with a particular index value from each
+cache way grouped together forms a set.
+11) cache controller:
+-> is a hardware, that copies code or data from main memory to cache memroy
+automatically.
+-> interprets read and write memory requests before passing them on to the
+memory controller. It process a request by dividing the address of the request
+into three fields: tag field, set index field(line), data index field(offset).
+-> controller uses "set index" portion of the address to locate the cache line
+-> controller then checks valid bit to determine cache line is active
+-> and compares cache tag to the tad field of the address.
+-> Cache Hit/Miss:
+if comparison succeeds it is hit else it is miss.
+
+12) Cache line fill:
+on a cache miss, the controller copies an entire cahce line from main memory to
+cahce memory and provides the requested code or data to the processor. The
+copying of a cache line from memory to cache memory is known as cache line fill.
+
+13) Data Streaming:
+During cache line fill, cache controller may forward the loading data to the
+coer at the same time it is copying it to cache. Streaming allows a processor to
+continue execution while the cache controller fills the remaining words in the
+cache line.
+
+14) Eviction:
+If valid data exits in cache line but represents another address block in main
+memory, the entire cahce line is evicted and replaced by the cahce line
+containing the requested address. The process of removing an existing cache line
+as part of servicing cache miss is known as eviction.
+
 
 Desgin facts
 ------------
@@ -76,6 +137,15 @@ back to main memory.
 
 This can be a particular problem when you have multiple cores or memory agents
 like an external DMA controller.
+
+ARM L1 Cache: Harvard Architecture: has separate caches for Instruction and
+data.
+
+ARM L2 Cache: Unified Architecture: holds both instructions and data.
+ARM L2C-310 is an example of such an external L2 cache controller block.
+
+Systems having multiple cores, will have separate L1 cache and common L2 cache.
+
 
 
 
