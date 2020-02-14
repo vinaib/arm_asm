@@ -2,6 +2,11 @@
 information.
 2) with caches performance is improved
 3) Reduces power consumption by avoiding the need to drive external signals
+
+--------------------------------------------------------------------------------
+|31        Tag (20b)            12 | 11 set index (8b) 4 | 3 Data-index (4b) 0 |
+--------------------------------------------------------------------------------
+
 4) cahce Tag: 
 The top bits of the 32-bit address tells the cache where the
 information came from in main memory and is known as the tag.
@@ -33,9 +38,12 @@ Data Cache: valid bit, dirty bit
 A way is a subdivision of a cache, each way being of equal size and indexed in
 the same fashion. The line associated with a particular index value from each
 cache way grouped together forms a set.
+
 11) cache controller:
 -> is a hardware, that copies code or data from main memory to cache memroy
-automatically.
+automatically. When it receives a request from the core it must check to see
+whether the requested address is to be found in the cache. This is known as a
+cache look-up.
 -> interprets read and write memory requests before passing them on to the
 memory controller. It process a request by dividing the address of the request
 into three fields: tag field, set index field(line), data index field(offset).
@@ -44,6 +52,9 @@ into three fields: tag field, set index field(line), data index field(offset).
 -> and compares cache tag to the tad field of the address.
 -> Cache Hit/Miss:
 if comparison succeeds it is hit else it is miss.
+-> on cache miss: 
+the request must be passed to the next level of the memory hierarchy – an L2
+cache, or external memory.
 
 12) Cache line fill:
 on a cache miss, the controller copies an entire cahce line from main memory to
@@ -146,7 +157,156 @@ ARM L2C-310 is an example of such an external L2 cache controller block.
 
 Systems having multiple cores, will have separate L1 cache and common L2 cache.
 
+--------------------------------------------------------------------------------
+Direct Mapped Cache
+--------------------------------------------------------------------------------
+In a direct-mapped cache each addressed location in main memory maps to a single
+location in cache memory. Since main memory is much larger than cache memory,
+there are many addresses in main memory that map to the same single location in
+cache memory.
 
+-> Direct-mapped caches are subject to high levels of thrashing
 
+Repeated cache misses result in continuous eviction of the routine that not
+running. This is cache thrashing.
 
+--------------------------------------------------------------------------------
+Set Associativity: Reduce frequency of thrashing
+--------------------------------------------------------------------------------
+To reduce the frequency of thrashing, some caches are designed in such a way
+that, cache memory is divided into smaller equal units, called ways.
 
+The main caches of ARM cores are always implemented using a set associative
+cache. improving program execution speed and giving more deterministic
+execution. It comes at the cost of increased hardware complexity and a slight
+increase in power(because multiple tags are compared on each cycle).
+
+(in cortex A PG: section 8.4.3
+A memory location can then map to a way rather than a line)
+
+///  Background: start
+32 bit Memory Address: [31 - 12] Tag : [11 - 4] Set index : [3 - 1]Data Index
+Tag: points to memory location in main memory
+Set index: points to line
+Data index: offset in the line
+///  Background: end
+
+however, the set index now addresses more than one cache line—it points to one
+cache line in each way. Instead of one way of 256 lines, the cache has four ways
+of 64 lines. The four cache lines with the same set index are said to be in the
+same set, which is the origin of the name “set index.”.
+
+The set of cache lines pointed to by the set index are set associative. A data
+or code block from main memory can be allocated to any of the four ways in a
+set.
+
+Level 2 cache implementations (such as the ARM L2C-310) can have larger numbers
+of ways (higher associativity) because of their much larger size.
+
+Cortex-A7 or Cortex-A9 processors: 
+4-way set associative 32KB data cache, with an 8-word cache line length.
+
+To find number of line in a way, then we must know number of ways, size of line
+ and size of cache. As in Cortex A7 size of cache is 32KB. 
+ size of line: 8 words (8 * 4 = 32 Bytes (not bits))
+ Number of ways: 4
+ then number of lines in each way: 32KB: (32 * 1024)/32  = 1024/4 = 256
+ lines/way
+ So 32 bit address:
+[31 : 13] 	= tag address
+[12: 5]		= 256 (number of lines)
+[4:2]		= 8 (number of words]
+[1:0]		= 4 (number of bytes in word)		
+--------------------------------------------------------------------------------
+Increasing Set Associativity: (ideal case)
+--------------------------------------------------------------------------------
+As the associativity of a cache controller goes up, the probability of thrashing
+goes down. The ideal goal would be to maximize the set associativity of a cache
+by designing it so any main memory location maps to any cache line. A cache that
+does this is known as a fully associative cache.
+
+CAM:
+However, as the associativity increases, so does the complexity of the hardware
+that supports it. One method used by hardware designers to increase the set
+associativity of a cache includes a content addressable memory (CAM).
+
+A CAM uses a set of comparators to compare the input tag address with a
+cache-tag stored in each valid cache line.
+
+In practice, performance improvements are minimal for Level 1 caches above 4-way
+associativity, with 8-way or 16-way associativity being more useful for larger
+level 2 caches.
+--------------------------------------------------------------------------------
+Write Buffers
+--------------------------------------------------------------------------------
+-> A write buffer is a very small, fast FIFO memory buffer that temporarily
+holds data that the processor would normally write to main memory.
+
+-> In a system without a write buffer, the processor writes directly to main
+memory.
+
+->The write buffer reduces the processor time taken to write small blocks of
+sequential data to main memory.
+
+->The FIFO memory of the write buffer is at the same level in the memory
+hierarchy as the L1 cache.
+
+->A write buffer also improves cache performance; the improvement occurs during
+cache line evictions.
+
+-> If the cache controller evicts a dirty cache line, it writes the cache line
+to the write buffer instead of main memory.
+
+-> The FIFO depth of a write buffer is usually quite small, only a few cache
+lines deep.
+
+Why FIFO depth is small?
+Data written to the write buffer is not available for reading until it has
+exited the write buffer to main memory. The same holds true for an evicted cache
+line: it too cannot be read while it is in the write buffer.
+
+Coalescing: Write Merging: Write Collapsing: Write Combining:
+Some write buffers are not strictly FIFO buffers. The ARM10 family, for
+example,supports coalescing—the merging of write operations into a single cache
+line. The write buffer will merge the new value into an existing cache line in
+the write buffer if they represent the same data block in main memory.
+Coalescing is also known as write merging, write collapsing, or write combining.
+
+--------------------------------------------------------------------------------
+Virtual and physical tags and indexes
+--------------------------------------------------------------------------------
+-> Early ARM processors such as the ARM720T or ARM926EJ-S processors used
+virtual addresses to provide both the index and tag values. This has the
+advantage that the core can do a cache look-up without the need for a virtual to
+physical address translation.
+
+-> The drawback is that changing the virtual to physical mappings in the system
+means that the cache must first be cleaned and invalidated, and this can have a
+significant performance impact.
+
+-> ARM11 family processors use a different cache tag scheme. Here, the cache
+index is still derived from a virtual address, but the tag is taken from the
+physical address. The advantage of a physical tagging scheme is that changes in
+virtual to physical mappings do not now require the cache to be invalidated.
+This can have significant benefits for complex multi-tasking operating systems
+that can frequently modify translation table mappings.
+
+-> It means that the cache hardware can read the tag value from the appropriate
+line in each way in parallel without actually performing the virtual to physical
+address translation, giving a fast cache response. Such a cache is often
+described as Virtually Indexed, Physically Tagged (VIPT).
+
+Page Coloring:
+-> there is a drawback to a VIPT implementation. For a 4-way set associative
+32KB or 64KB cache, bits [12] and [13] of the address are required to select the
+index. If 4KB pages are used in the MMU, bits [13:12] of the virtual address
+might not be equal to bits [13:12] of the physical address. There is therefore
+scope for potential cache coherency problems if multiple virtual address
+mappings point to the same physical address.
+
+This is solved by page coloring abd exists on other processor architectures too
+
+This problem is avoided by using a Physically Indexed, Physically Tagged (PIPT)
+cache implementation. The Cortex-A series of processors use such a scheme
+for their data caches. It means that page coloring issues are avoided, but
+at the cost of hardware complexity.
