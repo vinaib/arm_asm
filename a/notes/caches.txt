@@ -272,6 +272,24 @@ line. The write buffer will merge the new value into an existing cache line in
 the write buffer if they represent the same data block in main memory.
 Coalescing is also known as write merging, write collapsing, or write combining.
 
+sometimes the behavior of the write buffer is not what you want when accessing a
+peripheral, you might want the core to stop and wait for the write to complete
+before proceeding to the next step. Sometimes you really want a stream of bytes
+to be written and you don’t want the stores to be combined.ARM memory ordering
+model on page 10-3, describes memory types supported by the ARM architecture and
+how to use these to control how caches and write buffers are used for particular
+devices or parts of the memory map.
+
+--------------------------------------------------------------------------------
+Fetch Buffers
+-------------------------------------------------------------------------------
+->Similar components, called fetch buffers, can be used for reads.
+->cores typically contain prefetch buffers that read instructions from memory
+ahead of them actually being inserted into the pipeline. 
+->In general,such buffers are transparent to you. 
+->Some possible hazards associated with this will be overcome with memory
+ordering rules.
+
 --------------------------------------------------------------------------------
 Virtual and physical tags and indexes
 --------------------------------------------------------------------------------
@@ -310,3 +328,176 @@ This problem is avoided by using a Physically Indexed, Physically Tagged (PIPT)
 cache implementation. The Cortex-A series of processors use such a scheme
 for their data caches. It means that page coloring issues are avoided, but
 at the cost of hardware complexity.
+
+--------------------------------------------------------------------------------
+Cache Policies
+--------------------------------------------------------------------------------
+-> Allocation policy:
+
+Read Allocate Policy:
+A read allocate policy allocates a cache line only on a read. If a write is
+performed by the core that misses in the cache, the cache is not affected and
+the write goes to the next level of the hierarchy.
+
+write allocate policy:
+allocates a cache line for either a read or write that misses in the cache (and
+so might more accurately be called a read-write cache allocate policy).
+
+This is typically used in combination with a write-back write policy on current
+ARM cores.
+
+-> Replacement policy: (Victim, eviction)
+
+When there is a cache miss, the cache controller must select one of the cache
+lines in the set for the incoming data. The cache line selected is called the
+victim. If the victim contains valid, dirty data, the contents of that line must
+be written to main memory before new data can be written to the victim cache
+line. This is called eviction.
+
+The replacement policy is what controls the victim selection process.
+
+Round-Robin:
+Round-robin or cyclic replacement means that you have a counter (the victim
+counter) that cycles through the available ways and cycles back to 0
+when it reaches the maximum number of ways.
+
+Pseudo-Random:
+Pseudo-random replacement randomly selects the next cache line in a set to
+replace. The victim counter is incremented in a pseudo-random fashion and can
+point to any line in the set.
+
+Least Recently Used(LRU):
+Least Recently Used (LRU) replacement is used to replace the cache line or page
+that was least recently used.
+
+Most ARM processors support both Round-robin and Pseudo random policies. 
+The Cortex-A15 processor also supports LRU.
+
+A round-robin replacement policy is generally more predictable, but can suffer
+from poor performance in certain use cases and for this reason, 
+the pseudo-random policy is often preferred.
+
+Write policy:
+When the core executes a store instruction, a cache lookup on the address(es) to
+be written is performed. For a cache hit on a write, there are two choices.
+
+Write-through:
+->With this policy writes are performed to both the cache and main memory.
+->This means that the cache and main memory are kept coherent.
+
+Write-back:
+->In this case, writes are performed only to the cache, and not to main memory.
+->This means that cache lines and main memory can contain different data.
+->The cache line holds newer data, and main memory contains older data 
+(said to be stale). 
+->To mark these lines, each line of the cache has an associated dirty bit 
+(or bits). 
+->When a write happens that updates the cache, but not main memory, 
+the dirty bit is set. 
+->If the cache later evicts a cache line whose dirty bit is set (a dirty line),
+it writes the line out to main memory. Using a write-back cache policy can
+significantly reduce traffic to slow external memory and therefore improve
+performance and save power.
+->if there are other agents in the system that can access memory at the same
+time as the core, you must consider coherency issues.
+
+--------------------------------------------------------------------------------
+Cache performance and hit rate
+--------------------------------------------------------------------------------
+The hit rate is defined as the number of cache hits divided by the number of
+memory requests made to the cache during a specified time, normally calculated
+as a percentage.
+
+the miss rate is the number of total cache misses divided by the total number of
+memory requests made to the cache.
+
+Clearly, a higher hit rate will generally result in higher performance.
+
+There are some simple rules that can be followed to give better performance.
+
+-> The most obvious of these is to enable caches and write buffers and to use
+them wherever possible (typically for all parts of the memory system that
+contain code and more generally for RAM and ROM, but not peripherals).
+
+-> Performance will be considerably increased in Cortex-A series processors if
+instruction memory is cached.
+
+-> Placing frequently accessed data together in memory can also be helpful. For
+example, a frequently accessed array might benefit from having a base address at
+the start of a cache line.
+
+cache-friendly:
+Fetching a data value in memory involves fetching a whole cache line; if none of
+the other words in the cache line will be used, there will be little or no
+performance gain.
+
+This can be mitigated by accesses to sequential addresses, for example,
+accessing a row of an array, benefit from cache behavior.
+
+Non-predictable or non-sequential access patterns, for example, linked lists, do
+not.
+
+Smaller code might cache better than larger code and this can sometimes give
+seemingly paradoxical results.
+
+For example, a piece of C code might fit entirely within cache when compiled for
+Thumb (or for the smallest size) but not when compiled for ARM (or for maximum
+performance) and as a consequence can actually run faster than the more
+optimized version.
+
+--------------------------------------------------------------------------------
+Invalidating and cleaning cache memory
+--------------------------------------------------------------------------------
+When is it required?
+Cleaning and invalidation can be required when the contents of external memory
+have been changed and you want to remove stale data from the cache.
+
+It can also be required after MMU related activity such as changing access
+permissions, cache policies, or virtual to physical address mappings.
+
+Invalidation:
+-> Invalidation of a cache or cache line means to clear it of data.
+-> This is done by clearing the valid bit of one or more cache lines.
+-> he cache must always be invalidated after reset as its contents will be
+undefined.
+-> On invalidate, any updated data in the cache from writes to write-back
+cacheable regions would be lost by simple invalidation.
+
+Cleaning:
+-> Cleaning a cache means writing the contents of dirty cache lines out to main
+memory
+-> and Clear the dirty bit in cache line
+-> Cleaning cache makes the contents of the cache line and main memory coherent
+with each other.
+-> This is only applicable for data caches in which a write-back policy is used
+-> Cache invalidate, and cache clean operations can be performed by cache set,
+	or way, or by virtual address.
+
+CP15 operations:	
+-> The commands to either clean or invalidate the cache are CP15 operations.	
+-> They are available only to privileged code and cannot be executed in User
+ mode.
+-> CP15 instructions exist that will clean, invalidate level 1 and level 2 data
+   and instruction caches.
+
+--------------------------------------------------------------------------------
+Point of Coherency(PoC): External Memory
+--------------------------------------------------------------------------------
+For a particular address, the PoC is the point at which all blocks, for example,
+cores, DSPs, or DMA engines, that can access memory are guaranteed to see the
+same copy of a memory location. Typically, this will be the main external system
+memory
+
+--------------------------------------------------------------------------------
+Point of Unification(PoU): External Memory/L2
+--------------------------------------------------------------------------------
+The PoU for a core is the point at which the instruction and data caches of the
+core are guaranteed to see the same copy of a memory location. For example, a 
+unified level 2 cache would be the point of unification in a system with Harvard 
+level 1 caches and a TLB for cacheing translation table entries. If no external
+cache is present, main memory would be the Point of unification.
+
+In the Cortex-A9 processor the PoC and PoU is essentially the same place, at the
+L2 interface.
+
+
