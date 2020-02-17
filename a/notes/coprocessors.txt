@@ -13,6 +13,8 @@ registers, the instruction arguments include:
 -> The ARM architecture supports coprocessors, to extend the functionality of an
 ARM processor.
 -> There are 16 coprocessors described as CP0 to CP15.
+
+Coprocessor 15:
 -> The following coprocessors are reserved by ARM for specific purposes
 -> Coprocessor 15 (CP15) provides system control functionality.
 -> This includes architecture and feature identification, as well as control,
@@ -21,6 +23,24 @@ ARM processor.
 -> CP15: configures VMSA (Virtual memory System Architecutre)
 -> CP15: configures PMSA (Protected memory system architecture)
 -> CP15: also provides performance monitor registers.
+
+Coprocessor 14:
+-> debug
+-> the Thumb Execution Environment
+-> direct Java bytecode execution
+
+Coprocessor 10 and 11:
+-> together support floating-point and vector operations
+-> the control and configuration of the Floating-point and Advanced SIMD
+   architecture extensions.
+
+Coprocessor 8,9,12 and 13: 
+-> reserved for future use by ARM
+-> Any coprocessor access instruction attempting to access onse of these
+   coprocessors is undefined.
+ 
+Coporcessor 0 to 7:
+-> can provide vendor specific features
 
 setup_caches:
 MRC p15, 0, r1, c1, c0, 0	; Read System Control Register (SCTLR)
