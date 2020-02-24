@@ -1,0 +1,14 @@
+1) in multiprocessor/cores will there be separate MMU for each core?
+logically: no. but try to find answer
+
+2) in multiprocessor/core, if 4 different process are running how MMU works?
+
+3) in arm arch how exception vector table can be either at 0x0 (lower address)
+	or at 0xFFFF0000 (higher address)? in this kind of arch on reset where core
+	will look up for exception vector table? 
+
+4) 	Linux maps (4KB page) exception vectors to virtual address 0xFFFF0000 or
+0x00000000? how is this done? how it can map to desired virtual address? Need to
+check.
+
+
