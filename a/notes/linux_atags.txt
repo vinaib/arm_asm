@@ -1,0 +1,11 @@
+Bootloader performs below tasks:
+1. Setup and initialise the RAM.
+The boot loader is expected to find and initialise all RAM that the
+kernel will use for volatile data storage in the system.  It performs
+this in a machine dependent manner.
+
+2. Initialise one serial port.
+3. Detect the machine type.
+4. Setup the kernel tagged list.
+5. Load initramfs.
+6. Call the kernel image.
