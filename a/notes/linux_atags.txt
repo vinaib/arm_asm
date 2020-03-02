@@ -1,11 +1,44 @@
+--------------------------------------------------------------------------------
 Bootloader performs below tasks:
+Source: http://www.simtec.co.uk/products/SWLINUX/files/booting_article.html
+--------------------------------------------------------------------------------
 1. Setup and initialise the RAM.
-The boot loader is expected to find and initialise all RAM that the
+--------------------------------------------------------------------------------
+1) The boot loader is expected to find and initialise all RAM that the
 kernel will use for volatile data storage in the system.  It performs
 this in a machine dependent manner.
 
+2) In all cases it should be noted that all setup is performed by the
+bootloader. The kernel should have no knowledge of the setup or configuration of
+the RAM within a system other than that provided by the bootloader.
+
+3) The physical memory layout is passed to the kernel using the ATAG_MEM
+parameter. Memory does not necessarily have to be completely contiguous,
+although the minimum number of fragments is preferred. Multiple ATAG_MEM
+blocks allow for several memory regions. The kernel will coalesce blocks
+passed to it if they are contiguous physical regions.
+
+4) The bootloader may also manipulate the memory with the kernels command line,
+using the 'mem=' parameter, the options for this parameter are fully
+documented in linux/Documentation/kernel-parameters.txt.
+
+5) The kernel command line 'mem=' has the syntax mem=<size>[KM][,@<phys_offset>]
+which allows the size and physical memory location for a memory area to be
+defined. This allows for specifying multiple discontigous memory blocks at
+differing offsets by providing the mem= parameter multiple times.
+
+--------------------------------------------------------------------------------
 2. Initialise one serial port.
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 3. Detect the machine type.
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 4. Setup the kernel tagged list.
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 5. Load initramfs.
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 6. Call the kernel image.
+--------------------------------------------------------------------------------
