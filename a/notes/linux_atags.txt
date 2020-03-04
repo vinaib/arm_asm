@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 Bootloader performs below tasks:
-Source: http://www.simtec.co.uk/products/SWLINUX/files/booting_article.html
+Sources: 
+http://www.simtec.co.uk/products/SWLINUX/files/booting_article.html
 https://www.slax.org/blog/18432-initrd-versus-initramfs.html
 https://stackoverflow.com/questions/10603104/the-difference-between-initrd-and-initramfs.
 https://elinux.org/images/f/f9/Petazzoni-device-tree-dummies_0.pdf
@@ -137,7 +138,35 @@ a) It must lie completely within a single memory region (must not cross between
 areas defined by different ATAG_MEM parameters).
 b) It must be aligned to a page boundary (typically 4k)
 c) It must not conflict with the memory the zImage head code uses to decompress
-the kernel or it will be overwritten as no checking is performed.	
+the kernel or it will be overwritten as no checking is performed.
+
+4) Initrd/ramdisk is a fixed-size block device, which requires to be 'formatted' 
+by a filesystem such as ext2. It sits on /dev/ram0 by default, and cannot be 
+enlarged or shortened.
+a)Linux is designed to cache all files and directory entries read from or 
+written to block devices, so Linux copies data to and from the ramdisk into the
+"page cache" (for file data), and the "dentry cache" (for directory entries).
+b) The initrd file is read and unzipped into the device, as if you did zcat
+initrd | dd of=/dev/ram0 or something similar.
+c)The initrd contains an image of a filesystem, so now you can mount the
+filesystem as usual: mount /dev/ram0 /root. Naturally, filesystems need a
+driver, so if you use ext2, the ext2 driver has to be compiled in-kernel.
+
+
+5) On the other hand, initramfs is a cpio archive which is simply unpacked
+during boot to ramfs memory. This memory is of dynamic size and thus can be
+shortened or enlarged as needed.
+a) It evolved around the idea, what if Linux's cache could be mounted like a
+filesystem? These ram based filesystems automatically grow or shrink to fit the
+size of the data they contain. Adding files to a ramfs (or extending existing
+files) automatically allocates more memory, and deleting or truncatingfiles 
+frees that memory.
+b) A tmpfs is mounted: mount -t tmpfs nodev /root. The tmpfs doesn't need a
+driver, it is always on-kernel. No device needed, no additional drivers.
+c) The initramfs is uncompressed directly into this new filesystem: zcat
+initramfs | cpio -i, or similar.
+
+
 --------------------------------------------------------------------------------
 6. Initialising kernel: linux/Documentation/kernel-parameters.txt
 --------------------------------------------------------------------------------
@@ -151,4 +180,22 @@ port it should use for the kernel console.
 3) the bootloader can pass the relevant 'console=' option to the kernel, via the
 command line parameter specifying the port, and serial format options as
 described in linux/Documentation/kernel-parameters.txt.
+
+--------------------------------------------------------------------------------
+7. bootargs: passing through uboot vs passing through DTB
+--------------------------------------------------------------------------------
+a) bootargs in devicetree:
+-> chosen node is used to send boot arguments to the kernel
+example:
+chosen {
+        bootargs = "console=ttyO0,115200 root=/dev/mmcblk0p2 rootfstype=ext3 rw rootwait";
+        stdout-path = &uart0;
+    };
+b) bootargs through uboot command line
+bootargs= console=ttyO0,115200 ip=10.0.0.111:10.0.0.4::255.255. 255.0 rw
+root=/dev/nfs nfsroot=10.0.0.4:/home/user/beaglebone/rootfs
+
+if same parameter is set in the device tree and in the atags (uboot), the one
+from the uboot tags will be chosen.
+
 
