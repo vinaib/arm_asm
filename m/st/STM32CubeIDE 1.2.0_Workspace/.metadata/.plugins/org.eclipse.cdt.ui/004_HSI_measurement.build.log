@@ -1,0 +1,23 @@
+20:41:17 **** Build of configuration Debug for project 004_HSI_measurement ****
+make -j12 all 
+arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -c -x assembler-with-cpp --specs=nano.specs -mfloat-abi=soft -mthumb -o "Startup/startup_stm32f446retx.o" "../Startup/startup_stm32f446retx.s"
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F446RETx -DDEBUG -DNUCLEO_F446RE -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+arm-none-eabi-gcc "../Src/syscalls.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F446RETx -DDEBUG -DNUCLEO_F446RE -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/syscalls.d" -MT"Src/syscalls.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/syscalls.o"
+arm-none-eabi-gcc "../Src/sysmem.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F446RETx -DDEBUG -DNUCLEO_F446RE -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/sysmem.d" -MT"Src/sysmem.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/sysmem.o"
+arm-none-eabi-gcc -o "004_HSI_measurement.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\Workspace\arm_asm\m\st\STM32CubeIDE 1.2.0_Workspace\004_HSI_measurement\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="004_HSI_measurement.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: 004_HSI_measurement.elf
+ 
+arm-none-eabi-size   004_HSI_measurement.elf 
+arm-none-eabi-objdump -h -S  004_HSI_measurement.elf  > "004_HSI_measurement.list"
+arm-none-eabi-objcopy  -O binary  004_HSI_measurement.elf  "004_HSI_measurement.bin"
+   text	   data	    bss	    dec	    hex	filename
+    808	      8	   1568	   2384	    950	004_HSI_measurement.elf
+Finished building: default.size.stdout
+ 
+Finished building: 004_HSI_measurement.list
+Finished building: 004_HSI_measurement.bin
+ 
+ 
+
+20:41:18 Build Finished. 0 errors, 0 warnings. (took 726ms)
+

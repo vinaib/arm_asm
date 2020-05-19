@@ -1,0 +1,23 @@
+20:40:29 **** Build of configuration Debug for project 002_peripheral_clock ****
+make -j12 all 
+arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -c -x assembler-with-cpp --specs=nano.specs -mfloat-abi=soft -mthumb -o "Startup/startup_stm32f446retx.o" "../Startup/startup_stm32f446retx.s"
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F446RETx -DDEBUG -DNUCLEO_F446RE -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+arm-none-eabi-gcc "../Src/syscalls.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F446RETx -DDEBUG -DNUCLEO_F446RE -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/syscalls.d" -MT"Src/syscalls.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/syscalls.o"
+arm-none-eabi-gcc "../Src/sysmem.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F446RETx -DDEBUG -DNUCLEO_F446RE -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/sysmem.d" -MT"Src/sysmem.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/sysmem.o"
+arm-none-eabi-gcc -o "002_peripheral_clock.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\Workspace\arm_asm\m\st\STM32CubeIDE 1.2.0_Workspace\002_peripheral_clock\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="002_peripheral_clock.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: 002_peripheral_clock.elf
+ 
+arm-none-eabi-size   002_peripheral_clock.elf 
+arm-none-eabi-objdump -h -S  002_peripheral_clock.elf  > "002_peripheral_clock.list"
+arm-none-eabi-objcopy  -O binary  002_peripheral_clock.elf  "002_peripheral_clock.bin"
+   text	   data	    bss	    dec	    hex	filename
+    744	      8	   1568	   2320	    910	002_peripheral_clock.elf
+Finished building: default.size.stdout
+ 
+Finished building: 002_peripheral_clock.list
+Finished building: 002_peripheral_clock.bin
+ 
+ 
+
+20:40:29 Build Finished. 0 errors, 0 warnings. (took 717ms)
+
