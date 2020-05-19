@@ -170,3 +170,9 @@ java.lang.RuntimeException
 
 !ENTRY org.eclipse.cdt.core 1 0 2020-05-19 21:01:36.751
 !MESSAGE Indexed '006_STM32F446RE_DRIVERS' (8 sources, 63 headers) in 0.193 sec: 2,938 declarations; 6,775 references; 0 unresolved inclusions; 1 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2020-05-19 22:01:49.982
+!MESSAGE Indexed '007_cortexm4_demo' (0 sources, 0 headers) in 0 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2020-05-19 22:01:51.272
+!MESSAGE Indexed '007_cortexm4_demo' (3 sources, 0 headers) in 0.007 sec: 67 declarations; 42 references; 10 unresolved inclusions; 0 syntax errors; 14 unresolved names (11%)
