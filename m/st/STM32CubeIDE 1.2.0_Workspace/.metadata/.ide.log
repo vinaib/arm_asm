@@ -524,3 +524,73 @@
 2020-05-19 20:10:28,456 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.2
 2020-05-19 20:10:28,457 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.1
 2020-05-19 20:10:28,457 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.0
+2020-05-19 20:35:50,146 [INFO] MainUpdater:2230 - connection check result : 10
+2020-05-19 20:35:50,147 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Successfull proxy connection.
+2020-05-19 20:35:50,181 [INFO] McuFinderGlobals:40 - Set McuFinder mode to 2 (CubeIDE integrated)
+2020-05-19 20:35:50,182 [INFO] FinderPluginLoader:86 - Searching for filters in installed packs
+2020-05-19 20:35:50,627 [INFO] LoadUrlFilesThread:161 - End of LoadServerUrlFiles without Thread
+2020-05-19 20:35:50,627 [INFO] McuDetailPanel:181 - Set advertising image to C:/Users/GAYATHRI/STM32Cube/Repository/\PR_STM32Cube_GitHub_0320_V1.png
+2020-05-19 20:35:50,803 [INFO] McuFilterPanel:282 - Update 0 favorites MCUs
+2020-05-19 20:35:50,958 [INFO] LoadUrlFilesThread:161 - End of LoadServerUrlFiles without Thread
+2020-05-19 20:35:50,958 [INFO] BoardDetailPanel:179 - Set advertising image to C:/Users/GAYATHRI/STM32Cube/Repository/\PR_STM32Cube_GitHub_0320_V1.png
+2020-05-19 20:35:50,965 [INFO] BoardFilterPanel:211 - Update 0 favorites Boards
+2020-05-19 20:35:50,991 [INFO] CrossSelectorPresenter:1319 - Cross Selector saved comparison directory: C:\Users\GAYATHRI\.stmcufinder\plugins\mcufinder\mcu\cs_comparisons_mx
+2020-05-19 20:36:41,069 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.2
+2020-05-19 20:36:41,070 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.1
+2020-05-19 20:36:41,071 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.0
+2020-05-19 20:38:36,260 [INFO] MainUpdater:2230 - connection check result : 10
+2020-05-19 20:38:36,261 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Successfull proxy connection.
+2020-05-19 20:38:36,295 [INFO] McuFinderGlobals:40 - Set McuFinder mode to 2 (CubeIDE integrated)
+2020-05-19 20:38:36,296 [INFO] FinderPluginLoader:86 - Searching for filters in installed packs
+2020-05-19 20:38:36,675 [INFO] LoadUrlFilesThread:161 - End of LoadServerUrlFiles without Thread
+2020-05-19 20:38:36,676 [INFO] McuDetailPanel:181 - Set advertising image to C:/Users/GAYATHRI/STM32Cube/Repository/\PR_STM32Cube_GitHub_0320_V1.png
+2020-05-19 20:38:36,818 [INFO] McuFilterPanel:282 - Update 0 favorites MCUs
+2020-05-19 20:38:36,905 [INFO] LoadUrlFilesThread:161 - End of LoadServerUrlFiles without Thread
+2020-05-19 20:38:36,905 [INFO] BoardDetailPanel:179 - Set advertising image to C:/Users/GAYATHRI/STM32Cube/Repository/\PR_STM32Cube_GitHub_0320_V1.png
+2020-05-19 20:38:36,912 [INFO] BoardFilterPanel:211 - Update 0 favorites Boards
+2020-05-19 20:38:36,921 [INFO] CrossSelectorPresenter:1319 - Cross Selector saved comparison directory: C:\Users\GAYATHRI\.stmcufinder\plugins\mcufinder\mcu\cs_comparisons_mx
+2020-05-19 20:39:25,277 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.2
+2020-05-19 20:39:25,277 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.1
+2020-05-19 20:39:25,277 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.0
+2020-05-19 20:41:39,492 [INFO] MainUpdater:2230 - connection check result : 10
+2020-05-19 20:41:39,493 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Successfull proxy connection.
+2020-05-19 20:41:39,528 [INFO] McuFinderGlobals:40 - Set McuFinder mode to 2 (CubeIDE integrated)
+2020-05-19 20:41:39,528 [INFO] FinderPluginLoader:86 - Searching for filters in installed packs
+2020-05-19 20:41:39,901 [INFO] LoadUrlFilesThread:161 - End of LoadServerUrlFiles without Thread
+2020-05-19 20:41:39,901 [INFO] McuDetailPanel:181 - Set advertising image to C:/Users/GAYATHRI/STM32Cube/Repository/\PR_STM32Cube_GitHub_0320_V1.png
+2020-05-19 20:41:40,072 [INFO] McuFilterPanel:282 - Update 0 favorites MCUs
+2020-05-19 20:41:40,207 [INFO] LoadUrlFilesThread:161 - End of LoadServerUrlFiles without Thread
+2020-05-19 20:41:40,207 [INFO] BoardDetailPanel:179 - Set advertising image to C:/Users/GAYATHRI/STM32Cube/Repository/\PR_STM32Cube_GitHub_0320_V1.png
+2020-05-19 20:41:40,224 [INFO] BoardFilterPanel:211 - Update 0 favorites Boards
+2020-05-19 20:41:40,224 [INFO] CrossSelectorPresenter:1319 - Cross Selector saved comparison directory: C:\Users\GAYATHRI\.stmcufinder\plugins\mcufinder\mcu\cs_comparisons_mx
+2020-05-19 20:42:10,229 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.2
+2020-05-19 20:42:10,230 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.1
+2020-05-19 20:42:10,231 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.0
+2020-05-19 20:44:05,328 [INFO] MainUpdater:2230 - connection check result : 10
+2020-05-19 20:44:05,343 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Successfull proxy connection.
+2020-05-19 20:44:05,359 [INFO] McuFinderGlobals:40 - Set McuFinder mode to 2 (CubeIDE integrated)
+2020-05-19 20:44:05,359 [INFO] FinderPluginLoader:86 - Searching for filters in installed packs
+2020-05-19 20:44:05,726 [INFO] LoadUrlFilesThread:161 - End of LoadServerUrlFiles without Thread
+2020-05-19 20:44:05,727 [INFO] McuDetailPanel:181 - Set advertising image to C:/Users/GAYATHRI/STM32Cube/Repository/\PR_STM32Cube_GitHub_0320_V1.png
+2020-05-19 20:44:05,852 [INFO] McuFilterPanel:282 - Update 0 favorites MCUs
+2020-05-19 20:44:05,946 [INFO] LoadUrlFilesThread:161 - End of LoadServerUrlFiles without Thread
+2020-05-19 20:44:05,946 [INFO] BoardDetailPanel:179 - Set advertising image to C:/Users/GAYATHRI/STM32Cube/Repository/\PR_STM32Cube_GitHub_0320_V1.png
+2020-05-19 20:44:05,967 [INFO] BoardFilterPanel:211 - Update 0 favorites Boards
+2020-05-19 20:44:05,973 [INFO] CrossSelectorPresenter:1319 - Cross Selector saved comparison directory: C:\Users\GAYATHRI\.stmcufinder\plugins\mcufinder\mcu\cs_comparisons_mx
+2020-05-19 20:44:55,911 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.2
+2020-05-19 20:44:55,912 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.1
+2020-05-19 20:44:55,912 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.0
+2020-05-19 22:01:15,075 [INFO] MainUpdater:2230 - connection check result : 10
+2020-05-19 22:01:15,076 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Successfull proxy connection.
+2020-05-19 22:01:15,111 [INFO] McuFinderGlobals:40 - Set McuFinder mode to 2 (CubeIDE integrated)
+2020-05-19 22:01:15,112 [INFO] FinderPluginLoader:86 - Searching for filters in installed packs
+2020-05-19 22:01:15,483 [INFO] LoadUrlFilesThread:161 - End of LoadServerUrlFiles without Thread
+2020-05-19 22:01:15,483 [INFO] McuDetailPanel:181 - Set advertising image to C:/Users/GAYATHRI/STM32Cube/Repository/\PR_STM32Cube_GitHub_0320_V1.png
+2020-05-19 22:01:15,636 [INFO] McuFilterPanel:282 - Update 0 favorites MCUs
+2020-05-19 22:01:15,741 [INFO] LoadUrlFilesThread:161 - End of LoadServerUrlFiles without Thread
+2020-05-19 22:01:15,741 [INFO] BoardDetailPanel:179 - Set advertising image to C:/Users/GAYATHRI/STM32Cube/Repository/\PR_STM32Cube_GitHub_0320_V1.png
+2020-05-19 22:01:15,746 [INFO] BoardFilterPanel:211 - Update 0 favorites Boards
+2020-05-19 22:01:15,774 [INFO] CrossSelectorPresenter:1319 - Cross Selector saved comparison directory: C:\Users\GAYATHRI\.stmcufinder\plugins\mcufinder\mcu\cs_comparisons_mx
+2020-05-19 22:01:49,926 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.2
+2020-05-19 22:01:49,927 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.1
+2020-05-19 22:01:49,927 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] withoutVersionV1.24.0

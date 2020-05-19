@@ -14,6 +14,31 @@
 #include<stdio.h>
 #include<stdint.h>
 
+//Block 8
+#define IRQNO_TIMER2 28
+#define IRQNO_I2C1	 31
+
+uint32_t *pNVIC_IPRBase = (uint32_t*)0xE000E400;
+uint32_t *pNVIC_ISERBase = (uint32_t*)0xE000E100;
+uint32_t *pNVIC_ISPRBase = (uint32_t*)0xE000E200;
+
+void configure_priority_for_irqs(uint8_t irqno, uint8_t priority_value)
+{
+	//find our iprx
+	uint8_t iprx = irqno/4;
+	uint32_t *ipr = pNVIC_IPRBase + iprx;
+
+	//position in iprx
+	uint8_t pos = (irqno%4) * 8;
+
+	//configure the priority
+	//stm32 16 priority levels
+	//0x00 0x10 0x20 0x30 0x40 0x50 0x60 0x70 0x80 0x90 0xa0 0xb0 0xc0 0xd0 0xe0 0xf0
+	*ipr &= ~(0xFF << pos);	//clear
+	*ipr |= (priority_value << pos);
+
+}
+
 // Block 7
 #define USART3_IRQNO 39
 
@@ -164,14 +189,32 @@ int main(void)
 	// Block 7: USART3 interrupt handling, by setting the NVIC interrupt set enable register manually.
 	// This manual set is for to demo only. Ideally this pending register bit is set by hardware.
 	// IRQ number of USART3 is 39, refer rm
-	uint32_t *pISPR1 = (uint32_t*)0xE000E204;
+/*	uint32_t *pISPR1 = (uint32_t*)0xE000E204;
 
 	// Manually pend the USART3
 	*pISPR1 |= (1 << (USART3_IRQNO % 32));
 
 	//2. Enable the USART3 IRQ number in NVIC
 	uint32_t *pISER1 = (uint32_t*)0xE000E104;
-	*pISER1 |= (1 << (USART3_IRQNO % 32));
+	*pISER1 |= (1 << (USART3_IRQNO % 32));*/
+
+	//Block 8
+	/*
+	 * Demo on interrupt Priority
+	 */
+	//1. configure the priority for the peripherals
+	configure_priority_for_irqs(IRQNO_TIMER2, 0x80);
+	configure_priority_for_irqs(IRQNO_I2C1, 0x80);	//try with priority 0x80, equal to timer2
+	configure_priority_for_irqs(IRQNO_I2C1, 0x70);  // try with priority 0x70, higher than timer2,
+												    // which means i2c1 interrupt will preempt timer2 interrupt
+
+	//2. set the interrupt pending bit in the NVIC PR
+	*pNVIC_ISPRBase |= (1 << IRQNO_TIMER2);
+
+	//3. Enable the IRQs in NVIC Interrupt Set Enable Register(ISER)
+	*pNVIC_ISERBase |= (1 << IRQNO_I2C1);
+	*pNVIC_ISERBase |= (1 << IRQNO_TIMER2);
+
 
 	for(;;);
 }
@@ -196,4 +239,16 @@ void SVC_Handler(void)
 void USART3_IRQHandler(void)
 {
 	printf("In USART3_IRQHandler\n");
+}
+
+void TIM2_IRQHandler(void)
+{
+	printf("In TIM2_IRQHandler\n");
+	*pNVIC_ISPRBase |= (1 << IRQNO_I2C1);
+	while(1);
+}
+
+void I2C1_EV_IRQHandler(void)
+{
+	printf("In I2C1_EV_IRQHandler\n");
 }
