@@ -1,0 +1,24 @@
+# An ARM multi-core processor can contain between one and four cores
+
+# Each core can be individually configured to take part (or not) in a data cache
+# coherency management scheme. A Snoop Control Unit (SCU) device inside the
+# processor has the task of automatically maintaining level 1 data cache
+# coherency, between cores within the cluster without software intervention.
+
+# ARM multi-core processors include an integrated interrupt controller. Multiple
+# external interrupt sources can be independently configured to target one or
+# more of the individual processor cores.
+
+# each core is able to signal (or broadcast) any interrupt to any other core or
+# set of cores in the system, from software.
+
+# Cortex-A MPCore processors also provide hardware mechanisms to accelerate OS
+# kernel operations such as system-wide cache and TLB maintenance operations.
+
+# Each of the Cortex-A series multi-core processors have the following features:
+• Configurable between one and four cores (at design time).
+• Level 1 data cache coherency.
+• Integrated interrupt controller.
+• Local timers and watchdogs.
+• An optional Accelerator Coherency Port (ACP).
+

@@ -1,0 +1,16 @@
+ASM=as
+LD=ld
+
+PREFIX=arm-linux-gnueabihf-
+
+OBJ = pgm.o
+
+%.o: %.s 
+	$(PREFIX)$(ASM) $< -o $@
+
+exe: $(OBJ)
+	$(PREFIX)$(LD) $^ -o $@
+	cp exe /var/lib/tftpboot
+
+clean:
+	rm -rf exe *.o

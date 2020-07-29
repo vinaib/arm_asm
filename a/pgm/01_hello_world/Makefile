@@ -11,6 +11,7 @@ OBJ_64 = pgm_64.o
 
 exe_32: $(OBJ_32)
 	$(PREFIX)$(LD) $^ -o $@
+	cp exe_32 /var/lib/tftpboot
 
 clean:
 	rm -rf exe_32 exe_64 *.o

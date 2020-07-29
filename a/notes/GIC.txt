@@ -1,0 +1,41 @@
+# Multi-core processors include an integrated interrupt controller that
+# implements the GIC architecture.
+
+# This controller provides 32 private interrupts per core.
+
+# lower 16 are Software Generated Interrupts (SGI) that can be generated only
+# through software operations.
+
+# and the rest are Private Peripheral Interrupts (PPI).
+
+# It also provides a configurable number of Shared Peripheral Interrupts (SPI),
+# up to 224 in current multi-core implementations.
+
+# It supports interrupt prioritization, pre-emption and routing to different
+# cores.
+
+# In a multi-core processor, the GIC control registers are memory-mapped and
+# located within the Private memory region.
+
+# The Interrupt Processor Targets registers configure that cores individual
+# interrupts are routed to.
+
+# The registers controlling the private interrupts (0-31) are banked, so that
+# each core can have its own configuration for these. This includes priority
+# configuration and the enabling or disabling of individual interrupts.
+
+# The Software Generated Interrupt (SGI) Register can assert a private SGI on
+# any core, or a groups of cores.
+
+# The interrupt acknowledge register bits [12:10] will provide the ID of the
+# core that made the request.
+
+# In both AMP and SMP systems, it is likely that cores will trigger interrupts
+# on other cores (or themselves), a so called softirq.
+
+# These can be used for kernel synchronization operations, or for communicating
+# between AMP cores. For operations requiring more information passed than a
+# raised interrupt, you can use a shared buffer to store messages.
+
+
+

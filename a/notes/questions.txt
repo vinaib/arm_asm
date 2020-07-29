@@ -1,5 +1,5 @@
 1) in multiprocessor/cores will there be separate MMU for each core?
-logically: no. but try to find answer
+logically: yes. but try to find answer
 
 2) in multiprocessor/core, if 4 different process are running how MMU works?
 

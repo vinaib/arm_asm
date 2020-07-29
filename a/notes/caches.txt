@@ -101,7 +101,18 @@ Temporal and Spatial locality
 ------------------------------
 The cache makes use of this repeated local reference in both time and space. 
 
+Spatial locality:
+-----------------
+An access to one location is likely to be followed by accesses to adjacent
+locations. Examples of this principle are:
+• sequential instruction execution
+• accessing a data structure.
+
 Temporal locality:
+------------------
+An access to an area of memory is likely to be repeated in a short time period.
+An example of this principle is the execution of a software loop.
+
 if the reference is in time, it is called temproal locality. This means that
 programs tend to reuse the same address over time.
 Example: 
@@ -113,6 +124,17 @@ to use addresses that are near to each other.
 Example:
 Data accesses (for example, to the stack) can be limited to small regions of
 memory.
+
+Why cache line stroes multiple words?
+To minimize the quantity of control information stored, the spatial locality
+property groups several locations together under the same tag. This logical
+block is commonly called a cache line.
+
+-> Normally, caches are self-managing, with the updates occurring automatically
+
+-> Different cache topologies and access policies are possible, however, they
+must comply with the memory coherency model of the underlying architecture.
+
 
 Write Buffers
 -------------
