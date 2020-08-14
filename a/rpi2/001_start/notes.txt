@@ -1,0 +1,16 @@
+RPI2 rev B: cortex A7
+---------------------
+In BCM2835 peripheral doc I/O base has different address base:
+In VC CPU BUS Address space:  I/O peripheral base: 0x7E000000
+
+refer: https://ultibo.org/wiki/Unit_BCM2836
+Expand: BCM2836 peripherals
+In ARM Physical Address space: I/O peripheral base: 0x3F000000
+function select register:	.equ GPFSEL2, 	0x3F200008
+GPIO set register: 			.equ GPSET0,	0x3F20001C
+GPIO clear register: 		.equ GPCLR0,	0x3F200028
+
+on target from uboot:
+usb start						//to init ethernet
+tftpboot 0x200000 pImage		//fetch image from tftp
+bootm 0x200000					//boot image from ram
