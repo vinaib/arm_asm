@@ -35,6 +35,8 @@
 *.i*86
 *.x86_64
 *.hex
+*.img
+*Image
 
 # Debug files
 *.dSYM/
@@ -54,3 +56,5 @@ dkms.conf
 # st editor files
 Debug
 debug
+
+*.swp
