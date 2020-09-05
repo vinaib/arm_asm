@@ -7,6 +7,8 @@ MKIMAGE=mkimage
 RM=rm
 OPT=
 GCC_OPT=-O0
+#LOAD_ADDRESS=00008000
+LOAD_ADDRESS=0
 
 # source files
 SOURCES_ASM := start.s
@@ -32,7 +34,7 @@ all: uImage kernel.img
 # -d use image data from 'datafile'
 
 uImage: kernel.img
-	$(MKIMAGE) -A arm -T kernel -a 00008000 -C none -n "bare metal" -d kernel.img pImage
+	$(MKIMAGE) -A arm -T kernel -a $(LOAD_ADDRESS) -C none -n "bare metal" -d kernel.img pImage
 	cp pImage /var/lib/tftpboot
 
 # Build binary image for bare metal

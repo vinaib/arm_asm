@@ -32,6 +32,8 @@ _start:
 	@@ initialize stack and disable irq and fiq
 	@@ with out initializing stacks too function call works
 	@@ then what would be the default sp value?
+	@@ may be it is initialized in boot loader, as I'm launching these app from
+	@@ uboot.
 	@msr CPSR_c,#SYS_MODE|I_BIT|F_BIT
 	@ldr sp,=stack_top
 
